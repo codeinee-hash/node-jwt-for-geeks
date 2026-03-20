@@ -1,3 +1,6 @@
+
+// Just for example, this data is in a file.env must be!
+
 export const PORT = 8000
 export const MONGO_URI =
 	'mongodb+srv://thedolbekov2_db_user:BgaeoBbyGwgxWVwe@cluster0.blbqszk.mongodb.net/?appName=Cluster0'
