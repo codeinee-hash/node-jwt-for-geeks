@@ -26,7 +26,6 @@ const authMiddleware = (
 		req.user = userData
 		return next()
 	} catch (error) {
-		console.log('Auth middleware error:', error)
 		return next(ApiError.UnauthorizedError())
 	}
 }
