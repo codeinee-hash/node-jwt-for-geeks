@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import { validationResult } from 'express-validator'
+import { REFRESH_TOKEN_MAX_AGE_MS } from '../constants/environment'
 import ApiError from '../exceptions/api-error'
 import userService from '../services/user-service'
 
@@ -32,7 +33,7 @@ class UserController {
 
 			res.cookie('refreshToken', userData.refreshToken, {
 				httpOnly: true,
-				maxAge: 30 * 24 * 60 * 60 * 1000,
+				maxAge: REFRESH_TOKEN_MAX_AGE_MS,
 			})
 
 			return res.json(userData)
@@ -57,7 +58,7 @@ class UserController {
 
 			res.cookie('refreshToken', userData.refreshToken, {
 				httpOnly: true,
-				maxAge: 30 * 24 * 60 * 60 * 1000,
+				maxAge: REFRESH_TOKEN_MAX_AGE_MS,
 			})
 
 			return res.json(userData)
@@ -90,11 +91,6 @@ class UserController {
 		try {
 			const { refreshToken } = req.cookies
 			const userData = await userService.refresh(refreshToken)
-
-			res.cookie('refreshToken', userData.refreshToken, {
-				httpOnly: true,
-				maxAge: 30 * 24 * 60 * 60 * 1000,
-			})
 
 			return res.json(userData)
 		} catch (error) {

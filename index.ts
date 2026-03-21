@@ -1,16 +1,21 @@
-import cors from 'cors'
 import cookieParser from 'cookie-parser'
+import cors from 'cors'
 import express from 'express'
 import mongoose from 'mongoose'
-import router from './router'
 import { MONGO_URI, PORT } from './constants/environment'
 import errorMiddleware from './middleware/error-middleware'
+import router from './router'
 
 const app = express()
 
 app.use(express.json())
 app.use(cookieParser())
-app.use(cors())
+app.use(
+	cors({
+		credentials: true,
+		origin: ['http://localhost:3000', 'http://localhost:5173'],
+	}),
+)
 app.use('/api', router)
 app.use(errorMiddleware)
 

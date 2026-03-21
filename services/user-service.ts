@@ -1,9 +1,9 @@
 import bcrypt from 'bcrypt'
-import ApiError from '../exceptions/api-error'
 import UserDto from '../dto/user-dto'
+import ApiError from '../exceptions/api-error'
 import userModel, { UserDocument } from '../models/user-model'
-import tokenService from './token-service'
 import { AuthResponse } from '../types/auth'
+import tokenService from './token-service'
 
 class UserService {
 	async registration(email: string, password: string): Promise<AuthResponse> {
@@ -62,7 +62,14 @@ class UserService {
 			throw ApiError.UnauthorizedError()
 		}
 
-		return this.buildAuthResponse(user)
+		const userDto = new UserDto(user)
+		const accessToken = tokenService.generateAccessToken({ ...userDto })
+
+		return {
+			accessToken,
+			refreshToken,
+			user: userDto,
+		}
 	}
 
 	async getAllUsers(): Promise<UserDocument[]> {

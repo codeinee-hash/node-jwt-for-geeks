@@ -1,5 +1,10 @@
 import jwt, { JwtPayload } from 'jsonwebtoken'
-import { JWT_ACCESS_SECRET, JWT_REFRESH_SECRET } from '../constants/environment'
+import {
+	ACCESS_TOKEN_EXPIRES_IN,
+	JWT_ACCESS_SECRET,
+	JWT_REFRESH_SECRET,
+	REFRESH_TOKEN_EXPIRES_IN,
+} from '../constants/environment'
 import tokenModel, { TokenDocument } from '../models/token-model'
 import { TokenPayload, Tokens } from '../types/auth'
 
@@ -14,12 +19,16 @@ const isTokenPayload = (
 }
 
 class TokenService {
-	generateTokens(payload: TokenPayload): Tokens {
-		const accessToken = jwt.sign(payload, JWT_ACCESS_SECRET, {
-			expiresIn: '15m',
+	generateAccessToken(payload: TokenPayload): string {
+		return jwt.sign(payload, JWT_ACCESS_SECRET, {
+			expiresIn: ACCESS_TOKEN_EXPIRES_IN,
 		})
+	}
+
+	generateTokens(payload: TokenPayload): Tokens {
+		const accessToken = this.generateAccessToken(payload)
 		const refreshToken = jwt.sign(payload, JWT_REFRESH_SECRET, {
-			expiresIn: '30d',
+			expiresIn: REFRESH_TOKEN_EXPIRES_IN,
 		})
 
 		return {
